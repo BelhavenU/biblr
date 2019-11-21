@@ -9,11 +9,11 @@
     <tbody>
       <tr>
         <th scope="row">Book</th>
-        <td><a class="btn btn-secondary" href="{{ url_for("bible.book_page", book_id=verse.b) }}">{{ verse.b }}</a></td>
+        <td><a class="btn btn-light" href="{{ url_for("bible.book_page", book_id=verse.b) }}">{{ verse.b }}</a></td>
       </tr>
       <tr>
         <th scope="row">Chapter</th>
-        <td><a class="btn btn-secondary" href="{{ url_for("bible.chapter_page", book_id=verse.b, chapter_number=verse.c) }}">{{ verse.c }}</a></td>
+        <td><a class="btn btn-light" href="{{ url_for("bible.chapter_page", book_id=verse.b, chapter_number=verse.c) }}">{{ verse.c }}</a></td>
       </tr>
       <tr>
         <th scope="col">Verse</th>
