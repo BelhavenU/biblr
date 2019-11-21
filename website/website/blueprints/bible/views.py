@@ -1,6 +1,5 @@
 from flask import (
-    render_template, abort, request, redirect, Blueprint, current_app,
-    url_for,
+    render_template, request, redirect, Blueprint, current_app, url_for,
 )
 
 from . import controller
@@ -21,8 +20,8 @@ def book_page(book_id):
             verses=result['verses'],
         )
     elif 'reason' in result:
-        return 400, result['reason']
-    abort(500)
+        return result['reason'], 400
+    return result['bad-json'], 500
 
 @bible.route('/chapter/<book_id>/<chapter_number>')
 def chapter_page(book_id, chapter_number):
@@ -33,8 +32,8 @@ def chapter_page(book_id, chapter_number):
             verses=result['verses'],
         )
     elif 'reason' in result:
-        return 400, result['reason']
-    abort(500)
+        return result['reason'], 400
+    return result['bad-json'], 500
 
 @bible.route('/verse/<book_id>/<chapter_number>/<verse_number>')
 def verse_page(book_id, chapter_number, verse_number):
@@ -47,5 +46,5 @@ def verse_page(book_id, chapter_number, verse_number):
             verse=result['verse'],
         )
     elif 'reason' in result:
-        return 400, result['reason']
-    abort(500)
+        return result['reason'], 400
+    return result['bad-json'], 500
