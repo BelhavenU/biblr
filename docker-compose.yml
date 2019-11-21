@@ -23,5 +23,6 @@ services:
       flask run -h 0.0.0.0
     volumes:
       - "./kjv:/kjv"
+      - /kjv/kjv.egg-info
     ports:
       - '127.0.0.1:8001:5000'
