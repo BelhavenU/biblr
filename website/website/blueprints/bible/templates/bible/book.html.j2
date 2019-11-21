@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Biblr{% endblock %}
+
+{% block body %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Book</th>
+        <th scope="col">Chapter</th>
+        <th scope="col">Verse</th>
+        <th scope="col">Text</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in verses: %}
+        <tr>
+          <td><a class="btn btn-secondary" href="{{ url_for("bible.book_page", book_id=v.b) }}">{{ v.b }}</a></td>
+          <td><a class="btn btn-secondary" href="{{ url_for("bible.chapter_page", book_id=v.b, chapter_number=v.c) }}">{{ v.c }}</a></td>
+          <td><a class="btn btn-secondary" href="{{ url_for("bible.verse_page", book_id=v.b, chapter_number=v.c, verse_number=v.v) }}">{{ v.v }}</a></td>
+          <td>{{ v.text }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+

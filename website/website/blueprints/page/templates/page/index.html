@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Biblr - Home{% endblock %}
+
+{% block preheader %}
+  <div class="jumbotron">
+    <h1 class="display-4">Biblr</h1>
+    <p class="lead">1611 King James Version Bible Explorer</p>
+  </div>
+{% endblock %}
+
+{% block body %}
+  <ul>
+    {% for (short, long) in books: %}
+      <li>{{ long }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+

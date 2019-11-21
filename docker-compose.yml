@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  website:
+    build: ./website
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=website.app:create_app()
+      - PYTHONUNBUFFERED=true
+    command: >
+      flask run -h 0.0.0.0
+    volumes:
+      - "./website:/website"
+    ports:
+      - '127.0.0.1:8000:5000'
+  kjv:
+    build: ./kjv
+    environment:
+      - FLASK_ENV=development
+      - "FLASK_APP=kjv.app:create_app()"
+      - PYTHONUNBUFFERED=true
+    command: >
+      flask run -h 0.0.0.0
+    volumes:
+      - "./kjv:/kjv"
+    ports:
+      - '127.0.0.1:8001:5000'
