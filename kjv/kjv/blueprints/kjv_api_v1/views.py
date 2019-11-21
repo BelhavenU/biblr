@@ -2,8 +2,10 @@ from flask import Blueprint, render_template
 
 from .models import Book, Chapter, Verse
 
-api_v1 = Blueprint('api_v1', __name__, template_folder='templates',
-                   url_prefix='/api/v1')
+api_v1 = Blueprint(
+    'api_v1', __name__, template_folder='templates',
+    url_prefix='/api/v1'
+)
 
 @api_v1.route('/books')
 def get_books():

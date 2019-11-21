@@ -12,15 +12,16 @@ def create_app(config: dict = None):
     Returns: Flask app (Flask)
 
     '''
-    app = Flask(__name__)
+    # Create the Flask app
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////kjv/kjv.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    if config:
-        app.config.update(config)
+    # Configure the flask app with the following values:
+    # - SQLALCHEMY_DATABASE_URI : 'sqlite:////kjv/kjv.db'
+    # - SQLALCHEMY_TRACK_MODIFICATIONS : False
 
-    app.register_blueprint(api_v1)
+    # If the config parameter is not None:
+    #   app.config.update(config)
+
+    # Register the api_v1 Blueprint
 
     init_extensions(app)
 

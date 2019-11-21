@@ -19,114 +19,38 @@ def init_db():
     db.drop_all()
     db.create_all()
 
-    book_lut = OrderedDict([
-        (s, Book(
-            short_name=s, long_name=l,
-            testament=data.books.short_to_testament[s],
-        )) for s, l in data.books.short_to_long.items()
-    ])
-
-    # db.session.add_all(list(zip(*book_lut.items()))[1])
-    # db.session.commit()
-
+    book_lut = OrderedDict()
+    for short_name, long_name in data.books.short_to_long.items():
+        '''
+        get this book's testament from data.books.short_to_testament
+        set book_lut[short_name] equal to Book(short_name, long_name, testament)
+        '''
+    
     chapter_lut = OrderedDict()
 
     verse_data = list(data.verses.get_all_verses())
 
-    for v in verse_data:
-        book = book_lut[v['b']]
-        chapter = chapter_lut.get((v['b'], v['c']))
-        if not chapter:
-            chapter = Chapter(number=v['c'])
-            chapter.book = book
-            # chapter.book_id = book.id
-        chapter_lut[(v['b'], v['c'])] = chapter
-
-    # db.session.add_all(list(zip(*chapter_lut.items()))[1])
-    # db.session.commit()
-
     verses = []
+
     for v in verse_data:
-        book = book_lut[v['b']]
-        chapter = chapter_lut[(v['b'], v['c'])]
-
-        verse = Verse(number=v['v'], text=v['text'])
-
-        verse.book = book
-        # verse.book_id = book.id
-        verse.chapter = chapter
-        # verse.chapter_id = chapter.id
-        verses.append(verse)
+        '''
+        get the book object from book_lut (using v['b'])
+        given a chapter key of (v['b'], v['c']), see if this key is in
+          chapter_lut
+        if the chapter key is not in chapter_lut:
+            create a new chapter object: Chapter(number=v['c'])
+            set chapter.book = book
+            save this new chapter object to chapter_lut[(v['b'], v['c'])]
+        else:
+            get the chapter object from chapter_lut
+        create a new Verse object: Verse(number=v['v'], text=v['text'])
+        set verse.book = book
+        set verse.chapter = chapter
+        add verse to verses list
+        '''
 
     db.session.add_all(list(zip(*book_lut.items()))[1])
     db.session.add_all(list(zip(*chapter_lut.items()))[1])
     db.session.add_all(verses)
     db.session.commit()
 
-# @click.group()
-# def cli():
-#     """ Run PostgreSQL related tasks. """
-#     pass
-
-
-# @click.command()
-# @click.option('--with-testdb/--no-with-testdb', default=False,
-#               help='Create a test db too?')
-# def init(with_testdb):
-#     """
-#     Initialize the database.
-
-#     :param with_testdb: Create a test database
-#     :return: None
-#     """
-#     db.drop_all()
-#     db.create_all()
-
-#     if with_testdb:
-#         db_uri = '{0}_test'.format(app.config['SQLALCHEMY_DATABASE_URI'])
-
-#         if not database_exists(db_uri):
-#             create_database(db_uri)
-
-#     return None
-
-
-# @click.command()
-# def seed():
-#     """
-#     Seed the database with an initial user.
-
-#     :return: User instance
-#     """
-#     if User.find_by_identity(app.config['SEED_ADMIN_EMAIL']) is not None:
-#         return None
-
-#     params = {
-#         'role': 'admin',
-#         'email': app.config['SEED_ADMIN_EMAIL'],
-#         'password': app.config['SEED_ADMIN_PASSWORD']
-#     }
-
-#     return User(**params).save()
-
-
-# @click.command()
-# @click.option('--with-testdb/--no-with-testdb', default=False,
-#               help='Create a test db too?')
-# @click.pass_context
-# def reset(ctx, with_testdb):
-#     """
-#     Init and seed automatically.
-
-#     :param with_testdb: Create a test database
-#     :return: None
-#     """
-#     ctx.invoke(init, with_testdb=with_testdb)
-#     ctx.invoke(seed)
-
-#     return None
-
-
-# cli.add_command(init)
-# cli.add_command(seed)
-# cli.add_command(reset)

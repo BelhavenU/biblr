@@ -5,20 +5,25 @@ from ...extensions import db
 shorten = partial(textwrap.shorten, width=1e300)
 
 class Verse(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    '''Verse database ORM model
+    '''
+    # id is an integer column with primary_key set to True
 
-    chapter_id = db.Column(
-        db.Integer, db.ForeignKey('chapter.id'), nullable=False
-    )
-    chapter = db.relationship(
-        'Chapter', backref=db.backref('verses', lazy=True)
-    )
+    # number is an integer column that is not nullable
 
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
-    book = db.relationship('Book', backref=db.backref('verses', lazy=True))
+    # text is a string column that is not nullable
+    
+    # book_id is an integer column that is a db.ForeignKey to
+    # 'book.id' that is not nullable
 
-    number = db.Column(db.Integer, nullable=False)
-    text = db.Column(db.String, nullable=False)
+    # book is a db.relationship with the 'Book' object with a
+    # backref to db.backref('verses', lazy=True)
+
+    # chapter_id is an integer column that is a db.ForeignKey to
+    # 'chapter.id' that is not nullable
+
+    # chapter is a db.relationship with the 'Chapter' object with a
+    # backref to db.backref('verses', lazy=True)
 
     def __repr__(self):
         return shorten(f'''
@@ -27,12 +32,14 @@ class Verse(db.Model):
         ''')
 
     def as_dict(self):
-        return {
-            'b': self.book.short_name,
-            'c': self.chapter.number,
-            'v': self.number,
-            'text': self.text,
-        }
+        '''as_dict should return dictionary with the following key, value
+        pairs
+
+        - 'b' -> the short_name attribute of self.book
+        - 'c' -> the number attribute of self.chapter
+        - 'v' -> the number attribute of self
+        - 'text' -> the text attribute of self
+        '''
     
     @classmethod
     def by_book(cls, book_id):
@@ -57,12 +64,18 @@ class Verse(db.Model):
         
 
 class Chapter(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    '''Chapter database ORM model
+    '''
+    
+    # id is an integer column with primary_key set to True
 
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
-    book = db.relationship('Book', backref=db.backref('chapters', lazy=True))
+    # book_id is an integer column that is a db.ForeignKey to
+    # 'book.id' that is not nullable
 
-    number = db.Column(db.Integer, nullable=False)
+    # book is a db.relationship with the 'Book' object and a
+    # backref to db.backref('chapters', lazy=True)
+
+    # number is an integer column that is not nullable
     
     def __repr__(self):
         return shorten(f'''
@@ -70,16 +83,25 @@ class Chapter(db.Model):
         ''')
 
     def as_dict(self):
-        return {
-            'b': self.book.short_name,
-            'c': self.number,
-        }
+        '''as_dict should return dictionary with the following key, value
+        pairs
+
+        - 'b' -> the short_name attribute of self.book
+        - 'c' -> the number attribute of self
+        '''
 
 class Book(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    short_name = db.Column(db.String, unique=True, nullable=False)
-    long_name = db.Column(db.String, unique=True, nullable=False)
-    testament = db.Column(db.String, nullable=False)
+    '''Book database ORM model
+
+    '''
+    
+    # id is an integer column with primary_key set to True
+
+    # short_name is a string column that is unique and not nullable
+
+    # long_name is a string column that is unique and not nullable
+
+    # testament is a string column that is not nullable
     
     def __repr__(self):
         return shorten(f'''
@@ -87,8 +109,11 @@ class Book(db.Model):
         ''')
 
     def as_dict(self):
-        return {
-            'b': self.short_name,
-            'long_name': self.long_name,
-            'testament': self.testament,
-        }
+        '''as_dict should return dictionary with the following key, value
+        pairs
+
+        - 'b' -> the short_name attribute of self
+        - 'l' -> the long_name attribute of self
+        - 't' -> the testament attribute of self
+        '''
+        
